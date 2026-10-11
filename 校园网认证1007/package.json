@@ -1,0 +1,17 @@
+{
+  "name": "campus-login",
+  "version": "1.0.0",
+  "private": true,
+  "description": "阳光学院校园网（172.19.1.1 raas 门户）浏览器自动认证 + ping + 测速",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/main.mjs",
+    "relogin": "node src/main.mjs --relogin",
+    "headless": "node src/main.mjs --headless",
+    "netonly": "node src/main.mjs --skip-auth",
+    "logoff": "node src/main.mjs --logoff"
+  }
+}

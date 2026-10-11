@@ -1,0 +1,53 @@
+# ============================================================
+#  MUMU harness code — 仓库根忽略规则
+#  仓库结构：本目录即仓库根，各项目作为 monorepo 共存
+# ============================================================
+
+# ---------- 依赖 ----------
+node_modules/
+**/node_modules/
+
+# ---------- 运行时状态 / 敏感数据 ----------
+# 浏览器登录态目录：含 cookie、session token、VPN Tokens / Trust Tokens
+# 入库等于泄露登录凭据，永久排除
+**/.browser-profile/
+
+# ---------- 密钥 / 凭据 ----------
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+# 另注：harness启动器0914/release/api.txt 含真实 API key，
+#       由该项目的 .gitignore 单独排除，勿在该文件中放开 release/ 全目录
+
+# ---------- 构建产物 ----------
+# 保留各项目 release/ 中的安装包，排除其余构建中间产物
+dist/
+build/dist/
+out/
+**/__pycache__/
+*.pyc
+
+# ---------- PlatformIO 编译缓存 ----------
+# .pio/libdeps 是第三方库源码，.pio/build/*/ 是编译中间产物，
+# 两者均可由 `pio run` 重新生成（合计约 66MB）
+**/.pio/libdeps/
+**/.pio/build/*/*
+# 仅保留可烧录的固件成品
+!**/.pio/build/*/firmware.bin
+!**/.pio/build/*/bootloader.bin
+!**/.pio/build/*/partitions.bin
+
+# ---------- 日志与临时文件 ----------
+*.log
+*.tmp
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---------- 编辑器 ----------
+.idea/
+.vscode/

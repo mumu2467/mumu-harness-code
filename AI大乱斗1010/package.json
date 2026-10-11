@@ -1,0 +1,22 @@
+{
+  "name": "ai-arena",
+  "productName": "AI大乱斗",
+  "version": "1.0.0",
+  "private": true,
+  "description": "本地运行的 Electron 桌面应用：把同一段文字 + 图片同时发送到豆包 / DeepSeek / Kimi 网页版，三栏并排对比回答",
+  "main": "main.js",
+  "scripts": {
+    "start": "node scripts/launch.js",
+    "dev": "node scripts/launch.js --enable-logging",
+    "selftest": "node scripts/selftest.js",
+    "test": "node --test test/page-utils.test.mjs test/adapter.test.mjs test/injected-syntax.test.mjs",
+    "electron": "electron .",
+    "postinstall": "node scripts/check-env.js"
+  },
+  "author": "local",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^38.8.6",
+    "jsdom": "^30.1.2"
+  }
+}

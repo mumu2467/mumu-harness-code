@@ -1,0 +1,148 @@
+Processing esp32-s3-devkitc-1 (platform: espressif32; board: esp32-s3-devkitc-1; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+CONFIGURATION: https://docs.platformio.org/page/boards/espressif32/esp32-s3-devkitc-1.html
+PLATFORM: Espressif 32 (7.1.3) > Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)
+HARDWARE: ESP32S3 240MHz, 320KB RAM, 8MB Flash
+DEBUG: Current (esp-builtin) On-board (esp-builtin) External (cmsis-dap, esp-bridge, esp-prog, iot-bus-jtag, jlink, minimodule, olimex-arm-usb-ocd, olimex-arm-usb-ocd-h, olimex-arm-usb-tiny-h, olimex-jtag-tiny, tumpa)
+PACKAGES: 
+ - framework-arduinoespressif32 @ 4.20017.260907+sha.dcc1105b 
+ - tool-esptoolpy @ 2.41100.260830 (4.11.0) 
+ - toolchain-riscv32-esp @ 8.4.0+2021r2-patch5 
+ - toolchain-xtensa-esp32s3 @ 8.4.0+2021r2-patch5
+Converting main.ino
+LDF: Library Dependency Finder -> https://bit.ly/configure-pio-ldf
+LDF Modes: Finder ~ chain, Compatibility ~ soft
+Found 34 compatible libraries
+Scanning dependencies...
+Dependency Graph
+|-- TFT_eSPI @ 2.5.43
+|-- SPI @ 2.0.0
+|-- Wire @ 2.0.0
+Building in release mode
+Compiling .pio\build\esp32-s3-devkitc-1\src\attitude.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\src\display_st7789.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\src\main.ino.cpp.o
+Building .pio\build\esp32-s3-devkitc-1\bootloader.bin
+Generating partitions .pio\build\esp32-s3-devkitc-1\partitions.bin
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 1 ELF section
+Successfully created esp32s3 image.
+Compiling .pio\build\esp32-s3-devkitc-1\lib39c\SPI\SPI.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\lib755\FS\FS.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\lib755\FS\vfs_api.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\lib345\SPIFFS\SPIFFS.cpp.o
+In file included from src/app_config.h:39,
+                 from src/attitude.cpp:14:
+.pio/libdeps/esp32-s3-devkitc-1/TFT_eSPI/TFT_eSPI.h:973:8: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+       #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+        ^~~~~~~
+In file included from src/attitude.cpp:14:
+src/app_config.h:193:4: warning: #warning "WIRING NOTE: GPIO45 is an ESP32-S3 strapping pin (VDD_SPI). If the module pulls this line to 3.3V it may fail to boot; add a 10k pull-down on GPIO45 or move the signal to GPIO38 (README section 12)" [-Wcpp]
+   #warning "WIRING NOTE: GPIO45 is an ESP32-S3 strapping pin (VDD_SPI). If the module pulls this line to 3.3V it may fail to boot; add a 10k pull-down on GPIO45 or move the signal to GPIO38 (README section 12)"
+    ^~~~~~~
+src/app_config.h:199:4: warning: #warning "WIRING NOTE: GPIO40/41/42 are S3 JTAG pins (MTDO/MTDI/MTMS). Using them as GPIO is fine, but an external JTAG probe can no longer be attached" [-Wcpp]
+   #warning "WIRING NOTE: GPIO40/41/42 are S3 JTAG pins (MTDO/MTDI/MTMS). Using them as GPIO is fine, but an external JTAG probe can no longer be attached"
+    ^~~~~~~
+In file included from src/app_config.h:39,
+                 from src/display_st7789.cpp:20:
+.pio/libdeps/esp32-s3-devkitc-1/TFT_eSPI/TFT_eSPI.h:973:8: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+       #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+        ^~~~~~~
+In file included from src/display_st7789.cpp:20:
+src/app_config.h:193:4: warning: #warning "WIRING NOTE: GPIO45 is an ESP32-S3 strapping pin (VDD_SPI). If the module pulls this line to 3.3V it may fail to boot; add a 10k pull-down on GPIO45 or move the signal to GPIO38 (README section 12)" [-Wcpp]
+   #warning "WIRING NOTE: GPIO45 is an ESP32-S3 strapping pin (VDD_SPI). If the module pulls this line to 3.3V it may fail to boot; add a 10k pull-down on GPIO45 or move the signal to GPIO38 (README section 12)"
+    ^~~~~~~
+src/app_config.h:199:4: warning: #warning "WIRING NOTE: GPIO40/41/42 are S3 JTAG pins (MTDO/MTDI/MTMS). Using them as GPIO is fine, but an external JTAG probe can no longer be attached" [-Wcpp]
+   #warning "WIRING NOTE: GPIO40/41/42 are S3 JTAG pins (MTDO/MTDI/MTMS). Using them as GPIO is fine, but an external JTAG probe can no longer be attached"
+    ^~~~~~~
+In file included from src/app_config.h:39,
+                 from D:/MUMUcode/MUMU harness code/±ßÆÂ4G¼à²â1007/firmware/src/main.ino:70:
+.pio/libdeps/esp32-s3-devkitc-1/TFT_eSPI/TFT_eSPI.h:973:8: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+       #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+        ^~~~~~~
+In file included from D:/MUMUcode/MUMU harness code/±ßÆÂ4G¼à²â1007/firmware/src/main.ino:70:
+src/app_config.h:193:4: warning: #warning "WIRING NOTE: GPIO45 is an ESP32-S3 strapping pin (VDD_SPI). If the module pulls this line to 3.3V it may fail to boot; add a 10k pull-down on GPIO45 or move the signal to GPIO38 (README section 12)" [-Wcpp]
+   #warning "WIRING NOTE: GPIO45 is an ESP32-S3 strapping pin (VDD_SPI). If the module pulls this line to 3.3V it may fail to boot; add a 10k pull-down on GPIO45 or move the signal to GPIO38 (README section 12)"
+    ^~~~~~~
+src/app_config.h:199:4: warning: #warning "WIRING NOTE: GPIO40/41/42 are S3 JTAG pins (MTDO/MTDI/MTMS). Using them as GPIO is fine, but an external JTAG probe can no longer be attached" [-Wcpp]
+   #warning "WIRING NOTE: GPIO40/41/42 are S3 JTAG pins (MTDO/MTDI/MTMS). Using them as GPIO is fine, but an external JTAG probe can no longer be attached"
+    ^~~~~~~
+Compiling .pio\build\esp32-s3-devkitc-1\lib5f8\LittleFS\LittleFS.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\libea4\TFT_eSPI\TFT_eSPI.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\lib394\Wire\Wire.cpp.o
+Archiving .pio\build\esp32-s3-devkitc-1\lib39c\libSPI.a
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\Esp.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\FirmwareMSC.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\FunctionalInterrupt.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\HWCDC.cpp.o
+Archiving .pio\build\esp32-s3-devkitc-1\lib755\libFS.a
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\HardwareSerial.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\IPAddress.cpp.o
+Archiving .pio\build\esp32-s3-devkitc-1\lib345\libSPIFFS.a
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\IPv6Address.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\MD5Builder.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\Print.cpp.o
+Archiving .pio\build\esp32-s3-devkitc-1\lib5f8\libLittleFS.a
+In file included from .pio/libdeps/esp32-s3-devkitc-1/TFT_eSPI/TFT_eSPI.cpp:16:
+.pio/libdeps/esp32-s3-devkitc-1/TFT_eSPI/TFT_eSPI.h:973:8: warning: #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available! [-Wcpp]
+       #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
+        ^~~~~~~
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\Stream.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\StreamString.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\Tone.cpp.o
+Archiving .pio\build\esp32-s3-devkitc-1\lib394\libWire.a
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\USB.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\USBCDC.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\USBMSC.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\WMath.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\WString.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\base64.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\cbuf.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-adc.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-bt.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-cpu.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-dac.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-gpio.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-i2c-slave.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-i2c.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-ledc.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-matrix.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-misc.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-psram.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-rgb-led.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-rmt.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-sigmadelta.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-spi.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-time.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-timer.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-tinyusb.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-touch.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\esp32-hal-uart.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\firmware_msc_fat.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\libb64\cdecode.c.o
+Archiving .pio\build\esp32-s3-devkitc-1\libea4\libTFT_eSPI.a
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\libb64\cencode.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\main.cpp.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\stdlib_noniso.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\wiring_pulse.c.o
+Compiling .pio\build\esp32-s3-devkitc-1\FrameworkArduino\wiring_shift.c.o
+Archiving .pio\build\esp32-s3-devkitc-1\libFrameworkArduino.a
+Linking .pio\build\esp32-s3-devkitc-1\firmware.elf
+Retrieving maximum program size .pio\build\esp32-s3-devkitc-1\firmware.elf
+Checking size .pio\build\esp32-s3-devkitc-1\firmware.elf
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [=         ]   6.4% (used 20820 bytes from 327680 bytes)
+Flash: [=         ]  11.1% (used 372161 bytes from 3342336 bytes)
+Building .pio\build\esp32-s3-devkitc-1\firmware.bin
+esptool.py v4.11.0
+Creating esp32s3 image...
+Merged 2 ELF sections
+Successfully created esp32s3 image.
+========================= [SUCCESS] Took 11.90 seconds =========================
+
+Environment         Status    Duration
+------------------  --------  ------------
+esp32-s3-devkitc-1  SUCCESS   00:00:11.900
+========================= 1 succeeded in 00:00:11.900 =========================

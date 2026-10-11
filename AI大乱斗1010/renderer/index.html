@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <!--
+    CSP：渲染进程是本地页面，只允许本地资源 + 内联样式（图片缩略图用 dataURL）。
+    注意：这里的 CSP 只作用于宿主界面，不影响三个 webview 内部的站点页面。
+  -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' data:; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' data:; frame-src 'none'" />
+  <title>AI 大乱斗</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ==================================================================== -->
+  <!-- 顶部工具栏                                                            -->
+  <!-- ==================================================================== -->
+  <header id="topbar">
+    <div class="brand">
+      <span class="brand-logo">🥊</span>
+      <span class="brand-name">AI 大乱斗</span>
+      <span class="brand-sub">豆包 · DeepSeek · Kimi 同题对答</span>
+    </div>
+
+    <!-- 视图切换：对战（三栏网页）/ 聊天（一次提问 → 三份回答卡片） -->
+    <nav id="viewTabs">
+      <button class="tab active" data-view="battle">对战三栏</button>
+      <button class="tab" data-view="chat">聊天问答</button>
+    </nav>
+
+    <div class="top-tools">
+      <label class="tool-check" title="勾选/取消勾选全部站点">
+        <input type="checkbox" id="checkAll" checked /> 全选站点
+      </label>
+      <label class="tool-check" title="发送前自动把每个站点切到最好的模型和最强的推理档位（豆包→专家版、DeepSeek→深度思考、Kimi→K3+极致）">
+        <input type="checkbox" id="bestModel" checked /> 最佳模型
+      </label>
+      <label class="tool-check" title="三栏全部发送成功后自动清空输入区">
+        <input type="checkbox" id="autoClear" checked /> 自动清空
+      </label>
+      <label class="tool-check" title="开启后，任意一栏滚动会带动其他栏同步滚动">
+        <input type="checkbox" id="syncScroll" /> 同步滚动
+      </label>
+      <button class="tool-btn" id="layoutBtn" title="在左右三栏 / 上下一列之间切换">切换为上下布局 ⬌</button>
+      <button class="tool-btn" id="debugBtn" title="Ctrl+Shift+D：在页面内高亮命中的选择器">选择器调试模式</button>
+      <button class="tool-btn" id="applyBestBtn" title="立刻把三个站点切到最佳模型 + 最强推理（不用等开战）">套用最佳模型 ⚡</button>
+      <button class="tool-btn" id="chatWindowBtn" title="在独立窗口里打开「聊天助手」（Ctrl+Shift+C）">聊天助手 💬</button>
+      <button class="tool-btn" id="probeBtn" title="探测三站点里的 input[type=file]，方案 C 排查用">探测上传框</button>
+      <button class="tool-btn" id="reloadAllBtn" title="重新加载全部站点">全部重载 ⟳</button>
+    </div>
+  </header>
+
+  <!-- ==================================================================== -->
+  <!-- 统一输入区                                                            -->
+  <!-- ==================================================================== -->
+  <section id="compose">
+    <div class="compose-left">
+      <textarea id="composeText" rows="2"
+        placeholder="在这里输入要同时发给三个 AI 的内容…&#10;Enter 发送 · Shift+Enter 换行 · 可直接 Ctrl+V 粘贴截图 · 也可把图片拖进来"></textarea>
+
+      <div class="compose-imgs">
+        <div class="imgs-head">
+          <span>图片</span>
+          <span class="dim" id="imgCount">无</span>
+          <span class="dim">（支持多张；单张 ≤ 10MB）</span>
+        </div>
+        <div id="thumbStrip" class="thumb-strip"></div>
+      </div>
+    </div>
+
+    <div class="compose-right">
+      <input type="file" id="filePicker" accept="image/*" multiple hidden />
+      <button class="ghost-btn" id="pickImgBtn" title="从本地选择一张或多张图片">选择图片 🖼</button>
+      <button class="ghost-btn" id="clearBtn" title="清空文字与图片">清空 🧹</button>
+      <div class="stat"><span id="charCount">0 字</span></div>
+      <button id="battleBtn" title="同时发送到所有勾选的站点（Ctrl+Enter）">开战 🥊</button>
+    </div>
+  </section>
+
+  <!-- ==================================================================== -->
+  <!-- 聊天问答视图：一次提问 → 三个站点并行作答 → 三张卡片                -->
+  <!-- 默认顺序：DeepSeek → Kimi → 豆包                                      -->
+  <!-- ==================================================================== -->
+  <section id="chatView" hidden>
+    <div class="chat-ask">
+      <textarea id="chatInput" rows="1"
+        placeholder="输入你的问题，一次同时问三家 AI…（Enter 提交 / Shift+Enter 换行）"></textarea>
+      <button id="chatSendBtn">提问</button>
+    </div>
+
+    <div class="chat-toolbar">
+      <label class="tool-check" title="提问前先把三家切到最佳模型/最强推理">
+        <input type="checkbox" id="chatApplyBest" /> 提问前套用最佳模型
+      </label>
+      <span class="dim" id="chatStatus">等待提问</span>
+      <span class="col-spacer"></span>
+      <span class="dim">点击卡片右上角「选择」可选中并复制该回答</span>
+    </div>
+
+    <div id="chatCards" class="chat-cards"></div>
+  </section>
+
+  <!-- ==================================================================== -->
+  <!-- 放大视图工具条（扫码时出现）                                            -->
+  <!-- ==================================================================== -->
+  <div id="enlargeBar" hidden>
+    <span class="enlarge-icon">🔍</span>
+    <span id="enlargeTitle">放大视图</span>
+    <span id="enlargeHint" class="dim"></span>
+    <span class="col-spacer"></span>
+    <button class="tool-btn" id="reloadEnlargedBtn">重新加载该栏 ⟳</button>
+    <button class="tool-btn primary" id="exitEnlargeBtn">返回三栏 ✕ (Esc)</button>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- 中部：三栏并排（由 arena.mjs 动态生成）                                 -->
+  <!-- ==================================================================== -->
+  <main id="boards"></main>
+
+  <!-- ==================================================================== -->
+  <!-- 底部：时序日志                                                        -->
+  <!-- ==================================================================== -->
+  <footer id="logbar">
+    <div class="log-head">
+      <span>发送时序日志</span>
+      <span class="dim">灰=普通 · 绿=成功 · 黄=降级/警告 · 红=失败</span>
+      <span class="col-spacer"></span>
+      <button class="tool-btn" id="copyLogBtn">复制日志</button>
+      <button class="tool-btn" id="clearLogBtn">清空日志</button>
+    </div>
+    <div id="logLines" class="log-lines"></div>
+  </footer>
+
+  <script type="module" src="arena.mjs"></script>
+</body>
+</html>

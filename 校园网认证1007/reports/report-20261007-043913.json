@@ -1,0 +1,177 @@
+{
+  "startedAt": "2026-10-06T20:38:51.589Z",
+  "portal": "http://172.19.1.1",
+  "username": "2025269431",
+  "steps": {
+    "precheck": {
+      "ret": 0,
+      "data": {
+        "proxymode": 0,
+        "ip": "10.203.101.135",
+        "acct": "",
+        "logined": 1,
+        "sessionlogined": 0
+      },
+      "msg": ""
+    },
+    "auth": {
+      "state": "online",
+      "message": "本机 IP 已处于认证在线状态，无需重复登录",
+      "acct": "",
+      "detail": {
+        "proxymode": 0,
+        "ip": "10.203.101.135",
+        "acct": "",
+        "logined": 1,
+        "sessionlogined": 0
+      }
+    },
+    "internet": {
+      "ok": true,
+      "results": [
+        {
+          "name": "百度",
+          "url": "http://www.baidu.com/",
+          "ok": true,
+          "status": 200,
+          "ms": 56
+        },
+        {
+          "name": "Android 204",
+          "url": "http://connect.rom.miui.com/generate_204",
+          "ok": true,
+          "status": 204,
+          "ms": 89
+        }
+      ]
+    },
+    "ping": {
+      "icmp": {
+        "available": true,
+        "error": null,
+        "host": "www.baidu.com",
+        "ip": "36.152.44.93",
+        "sent": 5,
+        "received": 5,
+        "loss": 0,
+        "ttl": 52,
+        "times": [
+          18,
+          18,
+          18,
+          18,
+          18
+        ],
+        "min": 18,
+        "max": 18,
+        "avg": 18,
+        "raw": "正在 Ping www.a.shifen.com [36.152.44.93] 具有 32 字节的数据:\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n\r\n36.152.44.93 的 Ping 统计信息:\r\n    数据包: 已发送 = 5，已接收 = 5，丢失 = 0 (0% 丢失)，\r\n往返行程的估计时间(以毫秒为单位):\r\n    最短 = 18ms，最长 = 18ms，平均 = 18ms"
+      },
+      "tcp": {
+        "available": true,
+        "ip": "36.152.44.93",
+        "port": 443,
+        "sent": 5,
+        "received": 5,
+        "loss": 0,
+        "min": 22.5,
+        "max": 29.2,
+        "avg": 26.7,
+        "jitter": 2.2,
+        "times": [
+          22.5,
+          29.2,
+          27.4,
+          26.6,
+          27.6
+        ]
+      }
+    },
+    "speed": [
+      {
+        "name": "阿里 npmmirror CDN",
+        "ok": true,
+        "bytes": 107496074,
+        "serverSize": 107496074,
+        "ttfb": 41,
+        "seconds": 6.2,
+        "mbps": 138.7,
+        "steadyMbps": 120.9,
+        "peakMbps": 257.7,
+        "mBps": 16.54,
+        "windows": 30,
+        "samples": [
+          199.5,
+          257.7,
+          212.1,
+          253.8,
+          211.3,
+          220.3,
+          121.9,
+          97.6,
+          117.4,
+          133.7,
+          111.5,
+          118,
+          105.8,
+          127.1,
+          114,
+          118,
+          118,
+          111.6,
+          129.1,
+          107.5,
+          127.8,
+          103.7,
+          121.2,
+          116.7,
+          114,
+          126.5,
+          106.8,
+          126.5,
+          108.1,
+          119.9
+        ]
+      },
+      {
+        "name": "华为云镜像",
+        "ok": true,
+        "bytes": 83893305,
+        "serverSize": 107496074,
+        "ttfb": 331,
+        "seconds": 8.33,
+        "mbps": 80.6,
+        "steadyMbps": 83.9,
+        "peakMbps": 178,
+        "mBps": 9.6,
+        "windows": 11,
+        "samples": [
+          0.2,
+          17.4,
+          178,
+          74.6,
+          83.9,
+          83.9,
+          83.9,
+          83.9,
+          84,
+          83.8,
+          83.9
+        ]
+      },
+      {
+        "name": "Cloudflare 测速节点",
+        "ok": false,
+        "error": "HTTP 403"
+      }
+    ]
+  },
+  "summary": {
+    "bestMbps": 120.9,
+    "bestSource": "阿里 npmmirror CDN",
+    "avgMbps": 102.4,
+    "authState": "online",
+    "internet": true
+  },
+  "finishedAt": "2026-10-06T20:39:13.263Z"
+}

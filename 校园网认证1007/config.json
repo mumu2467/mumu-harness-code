@@ -1,0 +1,25 @@
+{
+  "username": "2025269431",
+  "password": "030013",
+  "portal": "http://172.19.1.1",
+
+  "browser": "",
+  "headless": false,
+  "keepBrowserOpen": false,
+
+  "pingHost": "www.baidu.com",
+  "pingCount": 5,
+
+  "speedTestBytes": 209715200,
+  "speedTestMaxMs": 8000,
+  "speedTestSources": [
+    {
+      "name": "阿里 npmmirror CDN",
+      "url": "https://cdn.npmmirror.com/binaries/electron/v28.3.3/electron-v28.3.3-win32-x64.zip"
+    },
+    {
+      "name": "华为云镜像",
+      "url": "https://mirrors.huaweicloud.com/electron/v28.3.3/electron-v28.3.3-win32-x64.zip"
+    }
+  ]
+}

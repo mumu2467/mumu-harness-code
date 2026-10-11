@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+# 注意：不能用 `release/` 整体忽略，否则两个安装包也进不了仓库。
+# 改为排除 release/ 下所有内容，仅白名单放行 .exe 安装包。
+# win-unpacked/（含 200MB exe，超 GitHub 单文件上限）与 api.txt（含真实 API key）
+# 因此继续被排除 —— 请勿改成放行整个 release/。
+release/*
+!release/*.exe
+dist/
+
+# Generated icon and preview screenshots
+build/icon.png
+build/shot-*.png
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

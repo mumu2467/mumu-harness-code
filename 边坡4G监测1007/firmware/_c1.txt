@@ -1,0 +1,11 @@
+Processing esp32-s3-devkitc-1 (platform: espressif32; board: esp32-s3-devkitc-1; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+Removing .pio\build\esp32-s3-devkitc-1
+Done cleaning
+========================= [SUCCESS] Took 0.41 seconds =========================
+
+Environment         Status    Duration
+------------------  --------  ------------
+esp32-s3-devkitc-1  SUCCESS   00:00:00.414
+========================= 1 succeeded in 00:00:00.414 =========================

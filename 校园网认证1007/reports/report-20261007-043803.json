@@ -1,0 +1,118 @@
+{
+  "startedAt": "2026-10-06T20:37:50.705Z",
+  "portal": "http://172.19.1.1",
+  "username": "2025269431",
+  "steps": {
+    "precheck": {
+      "ret": 0,
+      "data": {
+        "proxymode": 0,
+        "ip": "10.203.101.135",
+        "acct": "",
+        "logined": 1,
+        "sessionlogined": 0
+      },
+      "msg": ""
+    },
+    "auth": {
+      "state": "success",
+      "message": "认证成功！",
+      "detail": {
+        "portalReply": {
+          "ret": 0,
+          "data": [],
+          "msg": "认证成功！"
+        },
+        "ipAfter": {
+          "proxymode": 0,
+          "ip": "10.203.101.135",
+          "acct": "",
+          "logined": 1,
+          "sessionlogined": 0
+        },
+        "apiLog": [
+          {
+            "api": "/api/stat.php",
+            "status": 200,
+            "body": "{\"ret\":0,\"data\":[],\"msg\":\"认证成功！\"}"
+          },
+          {
+            "api": "/api/login.php",
+            "status": 200,
+            "body": "{\"ret\":0,\"data\":{\"type\":0},\"msg\":\"\"}"
+          },
+          {
+            "api": "/api/ack_auth.php",
+            "status": 200,
+            "body": "{\"ret\":0,\"data\":[],\"msg\":\"\"}"
+          }
+        ]
+      },
+      "acct": "2025269431"
+    },
+    "internet": {
+      "ok": true,
+      "results": [
+        {
+          "name": "百度",
+          "url": "http://www.baidu.com/",
+          "ok": true,
+          "status": 200,
+          "ms": 67
+        },
+        {
+          "name": "Android 204",
+          "url": "http://connect.rom.miui.com/generate_204",
+          "ok": true,
+          "status": 204,
+          "ms": 95
+        }
+      ]
+    },
+    "ping": {
+      "icmp": {
+        "available": true,
+        "error": null,
+        "host": "www.baidu.com",
+        "ip": "36.152.44.93",
+        "sent": 4,
+        "received": 4,
+        "loss": 0,
+        "ttl": 52,
+        "times": [
+          18,
+          18,
+          18,
+          18
+        ],
+        "min": 18,
+        "max": 18,
+        "avg": 18,
+        "raw": "正在 Ping www.a.shifen.com [36.152.44.93] 具有 32 字节的数据:\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n来自 36.152.44.93 的回复: 字节=32 时间=18ms TTL=52\r\n\r\n36.152.44.93 的 Ping 统计信息:\r\n    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，\r\n往返行程的估计时间(以毫秒为单位):\r\n    最短 = 18ms，最长 = 18ms，平均 = 18ms"
+      },
+      "tcp": {
+        "available": true,
+        "ip": "36.152.44.93",
+        "port": 443,
+        "sent": 4,
+        "received": 4,
+        "loss": 0,
+        "min": 24.4,
+        "max": 29.2,
+        "avg": 26.6,
+        "jitter": 1.8,
+        "times": [
+          24.4,
+          27.2,
+          25.6,
+          29.2
+        ]
+      }
+    }
+  },
+  "summary": {
+    "authState": "success",
+    "internet": true
+  },
+  "finishedAt": "2026-10-06T20:38:03.069Z"
+}

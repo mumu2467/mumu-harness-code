@@ -1,0 +1,157 @@
+﻿注意:任务可以自己写，也可以提需求找工程师实现，如果涉及到多个传感器等复杂应用，建议我们工程师给你实现，快速，稳定，靠谱。
+一、功能介绍
+本教程任务实现银尔达DTU,RTU 通过串口控制控制外部设备工作的案例。支持的产品型号只要包换TTL或者RS232或者RS485的即可，根据自己硬件需求选择。
+可以实现modbus协议设备控制，自定义串口协议设备控制等。
+注意输入输出的还可以自己内部实现联动，比如输入触发后，控制继电器输出等，这部分逻辑可以自己实现，比较简单，也可以找工程师实现。
+注意拥有串口的设备，还可以扩展各种传感器，比如读取温湿度，液位，电表，功率等数据上传监控，并且可以和继电器，输入等实现联动控制，这部分特殊逻辑比较复杂，如果有需要可以提需求让工程师给你对接传感器功能。
+
+二、显示的UI效果
+2.1、小程序界面
+
+2.2、WEB 界面
+
+2.3、实现的串口通讯协议
+当点击开关1，开，发送给串口的数据为HEX格式 0xFF 0xFF 0x01 0x55
+当点击开关1，关，发送给串口的数据为HEX格式 0xFF 0xFF 0x00 0x55
+当点击开关2，开，发送给串口的数据为字符串格式“aaaa01bb”
+当点击开关2，关，发送给串口的数据为字符串格式“aaaa00bb”
+根据经验，实际在使用的时候，一般还需要检查设备的应答，发送命令后接收应答在返回，同时周期心跳心跳包也是周期读取外部设备的状态，解析后再上报状态等，这些功能没实现，可以根据自己的实际设备增加和修改。
+
+三、任务代码
+产品创建，DTU参数配置参考《平台入门实例(必看)》教程，里面讲解了完整的产品创建，数据点定义，设备授权，设备配置，参数更新等流程。然后在把本教程创建产品的时候使用模板“ 串口透传指令控制 ”创建，已经设置了数据点和UI，然后把下面的任务拷贝到DTU的分组任务里面，上电更新参数即可，不需要在额外操作。
+
+function
+ local tname="M100P"
+ log.info(tname,"start")
+ local nid=1
+ local uid=1
+ PronetStopProRecCh(1)
+ UartStopProRecCh(1)
+ --IOT系统保留字段
+ local pver,fver,rssi,pele="M100P","DTU.1.1.21",50,50
+ --自定义字段
+ local cmd=""
+ local bck=""
+ local lasttime =os.time()
+ local needdup =1
+ local sdid =1
+ 
+ --查询table 数组里面是否有某个变量
+ function CheckNameInTable(t,value)
+ for i, v in ipairs(t) do
+ if v == value then
+ return true
+ end
+ end
+ return false
+ end
+ 
+ --通过CSQ获取信号强度的函数
+ function TaskGetRssi()
+ local csq = mobile.csq()
+ local r =0
+ if csq > 29 then 
+ r = 100
+ elseif csq > 25 then 
+ r = 90
+ elseif csq > 22 then 
+ r = 80
+ elseif csq > 20 then 
+ r = 70
+ elseif csq > 18 then 
+ r = 60
+ elseif csq > 16 then 
+ r = 50
+ elseif csq > 14 then 
+ r = 40
+ else 
+ r = 0
+ end 
+ return r 
+ end
+
+ while true do
+ --接收服务器下发的数据
+ local netr = PronetGetRecChAndDel(nid)
+ if netr then 
+ log.info(tname,"netr data",netr)
+ --解析IOT模型数据服务器下发的是JSON
+ local obj,r =json.decode(netr)
+ if r and obj and obj.cmd and obj.did then
+ if obj.cmd =="sset" then
+ local p = obj.param 
+ if p.sw1 then 
+ if p.sw1==1 then 
+ UartSetSendCh(uid,string.fromHex("FFFF0155"))
+ elseif p.sw1==0 then 
+ UartSetSendCh(uid,string.fromHex("FFFF0055"))
+ end 
+ sys.wait(200)
+ end 
+ 
+ if p.sw2 then 
+ if p.sw2==1 then 
+ UartSetSendCh(uid,"aaaa01bb")
+ elseif p.sw2==0 then 
+ UartSetSendCh(uid,"aaaa00bb")
+ end 
+ sys.wait(200)
+ end 
+ --应答服务器
+ local b={}
+ b.cmd="ssetbck"
+ b.did=obj.did --注意这个did需要和服务器下发的did一样，表示应答对应的命令
+ b.rst=0
+ b.times =os.time().."000" --转换成ms
+ local s = json.encode(b)
+ log.info(tname,"ssetbck data",s) 
+ PronetSetSendCh(nid,s) --发给服务器应答数据 
+ lasttime = os.time()
+ elseif obj.cmd =="sget" then --服务器读取一个或者多参数
+ local p=obj.param.datapoint
+ local b={} --b是组装应答的结构体
+ b.cmd ="sgetbck"
+ b.did =obj.did
+ b.rst =0
+ b.times =os.time().."000" --转换成ms
+ b.param={}
+ b.param.rssi=TaskGetRssi() --注意rssi是百分比表示
+ b.param.pele=100 --注意pele是百分比表示 
+ local s = json.encode(b)
+ log.info(tname,"sgetbck data",s)
+ PronetSetSendCh(nid,s) --发给服务器应答数据
+ lasttime = os.time()
+ 
+ elseif obj.cmd =="dgetbck" then --服务器应答设备获取参数的命令，可以处理也可以不出来，应答表示服务器收到了,没应答你可以重发
+ 
+ elseif obj.cmd =="dupbck" then --服务器应答设备上报参数的命令
+ 
+ end 
+ end 
+ end
+ 
+ --主动上报数据，一般是检查状态变化后或者周期上报，IOT 要求5分钟内必须上报数据要不然会提示离线
+ if os.time() -lasttime > 180 then --没任何数据交互180秒上报一次
+ lasttime = os.time()
+ needdup =1
+ log.info(tname,"heart up")
+ end 
+ 
+ if needdup ==1 then 
+ local b={} 
+ b.cmd ="dup"
+ b.did =sdid..""
+ b.times =os.time().."000" --转换成ms
+ b.param={}
+ b.param.rssi=TaskGetRssi() --注意rssi是百分比表示
+ b.param.pele=50 --注意pele是百分比表示,自己可以用vin去转换 
+ local s = json.encode(b)
+ log.info(tname,"dup data",s)
+ PronetSetSendCh(nid,s) --发给上报发给服务器
+ needdup =0
+ sdid =sdid+1 --每次发送后did要与上一次不一样
+ lasttime = os.time()
+ end 
+ sys.wait(100)
+ end
+end

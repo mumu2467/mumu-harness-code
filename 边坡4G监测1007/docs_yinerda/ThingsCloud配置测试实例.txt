@@ -1,0 +1,97 @@
+﻿目前只有Air780支持,固件版本等于大于V1.1.1。
+
+使用任何平台本质都是MQTT协议协议通讯，这个难点是搞清楚平台的通讯规则，理清楚订阅topic，发布topic和数据格式（物模型）。
+DTU目前是解决了平台基本的连接和交互问题，根据教程连接平台后，在实际实现自己的业务上用不起来。这个本质的原因是不清楚平台如何使用，平台需要的topic和物模型数据格式不清楚导致的。所以基本步骤测试完成后就要研究平台的文档和询问平台的技术支持，清楚topic和数据格式后，在继续下一步结合银尔达的技术支持，让DTU按自己业务需求上传和解析数据。
+一、工具简介
+DTU配置平台:https://dtu.yinerda.com
+DTU测试平台:http://test.yinerda.com
+串口测试软件:"YEDTestTools"软件,或者任意自己熟悉的串口调试软件。
+USB转串口调试工具:"YED-UUART-211"，集成电源，TTL，RS232，RS485专门为设备调试设计,或者任意自己熟悉的串口调试工具。
+二、必要条件
+2.1、如果您是首次使用DTU配置平台，请先参考《WEB配置入门教程》进行操作，包括设备的添加、分组的创建以及设备在分组中的分配。随后，依据本页指南完成云平台的参数设置及建立连接。
+2.2、设备接上天线，插上卡，正常10W电源供电，NET LED 500ms或者1000ms闪烁一次，表示网络正常。
+三、视频教程
+此处为语雀视频卡片，点击链接查看：ThingsCloud透传测试演示v0.2.mp4
+四、图文教程-创建产品获取参数
+进入连接:https://console.thingscloud.xyz。整体流程是创建产品，配置参数，更新参数，使用任务处理topic。
+ThingsCloud可以标准的TCP或者MQTT协议连接。我这们这里的ThingsCloud支持自动注册功能。
+3.1、创建项目
+根据区域选择，创建项目
+3.2、获取服务器MQTT服务器地址
+进入项目，连接信息，MQTT主机就是服务器地址。
+
+3.3、获取API接入点参数
+3.4、获取ProjectKey参数
+
+3.5、获取 TypeKey参数
+设备，设备类型，创建设备类型，根据需求选择，这里选择了从模板库导入了温湿度传感器，设备接入类型是直连设备，设备通讯方式选择蜂窝网络4G，数据格式是ThingsCloud标准接入协议。
+创建设备类型:
+
+设置设备类型:
+复制Typekey和打开自动注册
+
+3.6、获取topic主题
+topic众多，根据需求选择topic，参考官方文档
+https://www.thingscloud.xyz/docs/guide/connect-device/mqtt.html#%E4%BB%80%E4%B9%88%E6%98%AF-mqtt
+订阅topic是:attributes/response;attributes/get/response/+;attributes/push;event/response/+;command/send/+;command/reply/response/+
+五、图文教程-配置参数
+4.1、根据产品配置参数
+用透传topic，服务器调用API发送数据，可以使用任务的方式，解析服务器数据，控制设备查询设备。
+4.2、物模型透传topic任务示例
+本任务实现是DTU透传topic名字+，+数据给串口。串口发送topic名字+，+数据指定topic给服务器。下面demo直接拷贝到任务就能用。MCU可以通过收到的topic名字处理解析数据,组织topic名字应答服务器。
+function 
+ local taskname="userTask"
+ log.info(taskname,"start")
+ local nid=1
+ local uid=1
+ PronetStopProRecCh(1)
+ UartStopProRecCh(1)
+ PronetMqttProReciveTopic(nid,1,",")
+ while true do 
+ local netr = PronetGetRecChAndDel(nid)
+ if netr then 
+ log.info(taskname,"netr",netr)
+ UartSetSendCh(uid,netr)
+ end 
+ 
+ local uartr = UartGetRecChAndDel(uid)
+ if uartr then 
+ log.info(taskname,"uartr",uartr)
+ local netsta = PronetGetNetSta(nid)
+ log.info(taskname,"netsta",netsta)
+ if netsta ==1 then
+ local a1 ,a2 = string.find(uartr,",")
+ if a1 and a1~=1 and a2 then
+ local ccc={}
+ ccc[1]=string.sub(uartr,1,a1-1)
+ ccc[2]=string.sub(uartr,a1+1,-1)
+ log.info(taskname,"send data topic is ",ccc[1],"data is ",ccc[2])
+ PronetSetSendCh(nid,ccc)
+ end
+ end 
+ end 
+ sys.wait(100)
+ end 
+end
+4.3、更新参数
+配置完参数后，点击保存参数，断电重启设备，等待设备更新参数。
+如果你只有一台设备，可以在分组里面，观察未更新设备数量，如果是0表示更新。
+如果有多台设备，可以在设备列表里面查看，当“分组参数版本” 等于“设备参数版本”，表示参数更新了。
+4.4、观察服务器连接情况
+如果参数正确，自动创建并且激活设备，设备显示在线，可以刷新页面。
+
+4.5、服务器发送数据到串口
+根据设备类型，功能定义，知道这个产品有2个属性
+所以在测试的时候直接发json字符串即可{"temperature":30}。
+进入所有设备，选择测试设备，选择命令,下发命令。
+
+4.6、串口透传数据到服务器
+串口指定topic为 attributes,数据为{"temperature":35,"humidity":10}，既可以上报数据了
+
+4.7、DTU自动采集上报功能
+可以利用任务，轻松采集RS485数据，解析后上报采集值到服务器。同时可以通过服务器设置开关，轻松控制继电器等，可以找工程师定制。
+4.8、APP/小程序
+这个平台配置了小程序和APP，可以自行下载测试，笔者认为还是很方便。
+五、ThingCloud官方教程
+官方教程，参考一下。
+https://www.thingscloud.xyz/docs/tutorials/connect-device/dtu-yinerda-1.html

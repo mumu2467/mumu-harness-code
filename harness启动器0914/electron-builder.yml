@@ -1,0 +1,73 @@
+# electron-builder configuration for the DeepSeek Harness Launcher.
+# Icons are generated from build/icon.png by scripts/make-icon.mjs.
+
+appId: ai.deepseek.dsh.launcher
+productName: DeepSeek Harness Launcher
+copyright: Copyright © 2026
+
+directories:
+  output: release
+  buildResources: build
+
+# Only the runtime sources ship; tests, scripts, and the icon generator do not.
+# build/icon.png is included because the main process loads it as the window
+# icon, and a path outside the packed sources would not resolve inside asar.
+files:
+  - package.json
+  - src/main/**/*
+  - src/preload/**/*
+  - src/renderer/**/*
+  - build/icon.png
+  - "!**/*.map"
+
+extraMetadata:
+  main: src/main/main.js
+
+asar: true
+
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - arm64
+    - target: portable
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: DeepSeek Harness
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+
+portable:
+  artifactName: ${productName}-${version}-${arch}-portable.${ext}
+
+mac:
+  icon: build/icon.png
+  category: public.app-category.developer-tools
+  darkModeSupport: true
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+
+dmg:
+  artifactName: ${productName}-${version}-${arch}.${ext}
+
+linux:
+  icon: build/icon.png
+  category: Development
+  target:
+    - AppImage
+    - deb

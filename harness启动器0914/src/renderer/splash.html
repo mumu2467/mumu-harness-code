@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; form-action 'none'; base-uri 'none'">
+  <title>DeepSeek Harness Launcher</title>
+  <link rel="stylesheet" href="splash.css">
+</head>
+<body>
+  <main class="card">
+    <header class="head">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="34" height="34">
+          <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".45"/>
+          <path d="M12 29c5.5 0 8.4-3.6 11-7.4 2.6-3.8 5.6-7.6 11.4-7.6 1.4 0 1.7 1.9.4 2.4-4.6 1.8-6.6 5.2-8.9 8.8C23.5 29.4 20 34 12.6 34c-1.6 0-2.1-2.3-.6-5z"
+                fill="currentColor"/>
+          <circle cx="33.5" cy="31.5" r="2.6" fill="currentColor" opacity=".85"/>
+        </svg>
+      </div>
+      <div class="titles">
+        <h1 id="appTitle">DeepSeek Harness Launcher</h1>
+        <p class="sub" id="subtitle">dsh web &middot; 127.0.0.1</p>
+      </div>
+      <button id="quitBtn" class="ghost" type="button" title="Quit">&#10005;</button>
+    </header>
+
+    <section class="stage">
+      <div class="spinner" id="spinner" role="status" aria-live="polite"></div>
+      <p class="phase" id="phase">&nbsp;</p>
+      <p class="note" id="note" hidden></p>
+    </section>
+
+    <section class="panel" id="errorPanel" hidden>
+      <h2 id="errorTitle">Startup failed</h2>
+      <p class="detail" id="errorDetail"></p>
+      <p class="hint" id="errorHint"></p>
+      <ul class="problems" id="errorProblems"></ul>
+
+      <div class="token" id="tokenPanel" hidden>
+        <label for="tokenInput" id="tokenLabel">Token URL</label>
+        <div class="row">
+          <input id="tokenInput" type="text" spellcheck="false" autocomplete="off" placeholder="http://127.0.0.1:3080/?token=…">
+          <button id="submitTokenBtn" type="button" class="primary">Open this URL</button>
+        </div>
+        <p class="fieldError" id="tokenError" hidden></p>
+      </div>
+
+      <div class="row portRow">
+        <label for="portInput" id="portLabel">Port</label>
+        <input id="portInput" type="number" min="1" max="65535" step="1">
+        <button id="changePortBtn" type="button">Change port</button>
+      </div>
+    </section>
+
+    <details class="logWrap" id="logWrap">
+      <summary id="logSummary">Show log</summary>
+      <pre class="log" id="log"></pre>
+    </details>
+
+    <footer class="actions">
+      <button id="retryBtn" type="button" class="primary">Retry</button>
+      <button id="restartBtn" type="button">Restart service</button>
+      <button id="externalBtn" type="button">Open in system browser</button>
+      <button id="diagBtn" type="button">Copy diagnostics</button>
+    </footer>
+  </main>
+  <script src="splash.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+{
+  "startedAt": "2026-10-06T20:31:45.077Z",
+  "portal": "http://172.19.1.1",
+  "username": "2025269431",
+  "steps": {
+    "precheck": {
+      "ret": 0,
+      "data": {
+        "proxymode": 0,
+        "ip": "10.203.101.135",
+        "acct": "",
+        "logined": 1,
+        "sessionlogined": 0
+      },
+      "msg": ""
+    },
+    "internet": {
+      "ok": true,
+      "results": [
+        {
+          "name": "百度",
+          "url": "http://www.baidu.com/",
+          "ok": true,
+          "status": 200,
+          "ms": 59
+        },
+        {
+          "name": "Android 204",
+          "url": "http://connect.rom.miui.com/generate_204",
+          "ok": true,
+          "status": 204,
+          "ms": 87
+        }
+      ]
+    },
+    "ping": {
+      "icmp": {
+        "available": false,
+        "error": "ICMP 被当前运行环境禁止（spawn EPERM，无法调用系统 ping.exe）",
+        "raw": ""
+      },
+      "tcp": {
+        "available": true,
+        "ip": "36.152.44.132",
+        "port": 443,
+        "sent": 5,
+        "received": 5,
+        "loss": 0,
+        "min": 21.7,
+        "max": 28.4,
+        "avg": 26.1,
+        "jitter": 2.4,
+        "times": [
+          27.6,
+          27.2,
+          21.7,
+          28.4,
+          25.6
+        ]
+      }
+    },
+    "speed": [
+      {
+        "name": "阿里 npmmirror CDN",
+        "ok": true,
+        "bytes": 26214400,
+        "seconds": 1.02,
+        "mbps": 205.2,
+        "steadyMbps": 200.2,
+        "mBps": 24.46,
+        "ttfb": 145,
+        "serverSize": 29701389,
+        "samples": [
+          147.5,
+          252.8
+        ]
+      },
+      {
+        "name": "华为云镜像",
+        "ok": true,
+        "bytes": 26225944,
+        "seconds": 2.33,
+        "mbps": 90.2,
+        "steadyMbps": 95.6,
+        "mBps": 10.76,
+        "ttfb": 191,
+        "serverSize": 29701389,
+        "samples": [
+          23,
+          107.3,
+          83.9
+        ]
+      },
+      {
+        "name": "Cloudflare 测速节点",
+        "ok": true,
+        "bytes": 26224128,
+        "seconds": 3.35,
+        "mbps": 62.6,
+        "steadyMbps": 70.8,
+        "mBps": 7.46,
+        "ttfb": 156,
+        "serverSize": 50000000,
+        "samples": [
+          15,
+          67.6,
+          65.8,
+          83.3,
+          69.5,
+          67.9
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "bestMbps": 200.2,
+    "avgMbps": 122.2
+  },
+  "finishedAt": "2026-10-06T20:31:52.752Z"
+}
