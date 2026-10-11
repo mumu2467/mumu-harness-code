@@ -183,16 +183,24 @@ AI聚合工作台1012/
 ## 七、自检与测试
 
 ```bash
-npm run typecheck        # 前后端类型检查（tsc --noEmit）
-node scripts/smoke.mjs   # 后端端到端烟测（需要后端已在 8787 运行）
-node scripts/verify.mjs  # 一键全流程自检（自动构建并启动后端，跑完自动关闭）
+npm run typecheck          # 前后端类型检查（tsc --noEmit）
+node scripts/smoke.mjs     # 后端端到端烟测（需要后端已在 8787 运行）
+node scripts/devcheck.mjs  # 开发模式自检：验证 npm run dev 本身可用 + Vite 的 /api 与 /ws 代理
+node scripts/verify.mjs    # 一键全流程自检（自动构建并启动后端，跑完自动关闭）
 ```
 
 `scripts/verify.mjs` 会依次做：类型检查 → 构建前端 → 起后端 → 31 项后端断言 →
 用本机 Edge 截图 8 个场景 → 断言"1440 宽三列全显示 / 420 宽只显示一窗"，
 产物在 `.tmp/shots/`。
+`scripts/devcheck.mjs` 走的是**另一条链路**（Vite 5173 + 代理），
+它会真的在页面上发一条消息，确认 `/api` 与 `/ws` 代理都通、流式内容确实到了页面、且没有 JS 报错。
 
-**最近一次全绿结果**：后端 31/31，页面场景 9/9，响应式断言 2/2。
+**最近一次全绿结果**：后端 31/31，页面场景 9/9，响应式断言 2/2，开发模式 6/6。
+
+> 两个自检脚本都会在启动前**检查端口是否空闲**，并在结束时**同步回收整棵进程树**。
+> 这不是洁癖：实测遇到过"上一轮残留的后端占着 8787，新后端 EADDRINUSE 死掉，
+> 而 Vite 代理连到了那个陈旧实例"，表现是"页面一切正常、就是消息发不出去"，极难定位。
+
 
 ---
 
@@ -231,7 +239,8 @@ node scripts/verify.mjs  # 一键全流程自检（自动构建并启动后端�
 | `npm install` 报 `EPERM ... spawn` | 生命周期脚本用管道捕获输出被拒（受限沙箱常见）。加 `--ignore-scripts`（本项目没有必须跑 install 脚本的依赖） |
 | `vite` / `tsx` 报 `Error: spawn EPERM`（esbuild） | esbuild 必须用管道启动自身服务进程，**受限沙箱里做不到**。在你自己的终端里运行，或对该命令放宽沙箱权限 |
 | 页面能打开但顶部显示"WebSocket 已断开" | 后端没起来（或端口被占）。看 `npm run dev` 的日志，或单独 `npm run dev:server` |
-| `EADDRINUSE :8787 / :5173` | 端口被占。改 `.env` 的 `PORT`，或改 `packages/web/vite.config.ts` 里的 dev 端口与代理目标 |
+| `EADDRINUSE :8787 / :5173` | 端口被占。先结束占用者：`Get-NetTCPConnection -LocalPort 8787 \| ForEach-Object { taskkill /PID $_.OwningProcess /T /F }`；或改 `.env` 的 `PORT` 与 `packages/web/vite.config.ts` 里的 dev 端口/代理目标 |
+| 页面一切正常，但**消息发出去没有任何回复**（三列一直"正在思考"） | 十有八九是 8787 上跑着一个**陈旧的后端实例**（上一轮没清干净），Vite 代理连到了它。用上一条命令清掉占用者再 `npm run dev`；`npm run dev` 自己也会回收进程树，`node scripts/verify.mjs` / `devcheck.mjs` 会在启动前检查端口 |
 | 刷新页面后正在生成的回复变成"已中断" | **符合预期**：P1 的流不会跨页面刷新续传（P2 服务端持久化后会做 seq 校验与快照补发） |
 | 历史消息里的图片显示"历史图片未保留" | **符合预期**：P1 只把图片留在内存，落盘会剥掉 dataURL（见上文取舍） |
 | 三家回答的长度统计/耗时与官方不一致 | token 是**估算值**（CJK 约 1.6 tok/字），网页版拿不到真实 usage；耗时是真实的 |

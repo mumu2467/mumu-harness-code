@@ -31,7 +31,6 @@ async function main(): Promise<void> {
     logger: false,
     // 图片以 dataURL 走 JSON 请求体，默认 1MB 上限不够用
     bodyLimit: 32 * 1024 * 1024,
-    disableRequestLogging: true,
   });
 
   /**

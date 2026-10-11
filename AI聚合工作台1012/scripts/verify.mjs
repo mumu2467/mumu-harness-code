@@ -9,8 +9,9 @@
  * 用法：node scripts/verify.mjs
  * 产物：.tmp/shots/*.png 与终端里的断言报告
  */
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -60,6 +61,40 @@ function shot(outName, steps = [], size) {
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * 端口预检。
+ *
+ * 为什么要做：实测踩过一次坑 —— 上一轮自检残留的后端还占着 8787，
+ * 新起的后端 EADDRINUSE 直接死掉，而 Vite 代理连到了那个**陈旧实例**上，
+ * 于是"页面正常、三列都在、就是消息发不出去"，很难定位。
+ * 与其相信环境干净，不如开机先检查。
+ */
+async function portInUse(port) {
+  return new Promise((resolve) => {
+    const srv = net.createServer();
+    srv.once('error', (err) => resolve(err.code === 'EADDRINUSE'));
+    srv.once('listening', () => srv.close(() => resolve(false)));
+    srv.listen(Number(port), '127.0.0.1');
+  });
+}
+
+/** 结束整棵进程树（同步等待，确保不会留下占端口的孤儿进程） */
+function killTree(pid) {
+  if (!pid) return;
+  if (isWin) spawnSync('taskkill', ['/PID', String(pid), '/T', '/F'], { stdio: 'ignore' });
+  else {
+    try {
+      process.kill(-pid, 'SIGTERM');
+    } catch {
+      try {
+        process.kill(pid, 'SIGTERM');
+      } catch {
+        /* 已退出 */
+      }
+    }
+  }
+}
 
 /** 轮询后端健康检查 */
 async function waitHealth(timeoutMs = 40000) {
@@ -126,6 +161,15 @@ try {
   if (buildCode !== 0) throw new Error('构建失败，后续步骤无法进行');
 
   console.log('\n=== [2/5] 启动后端（tsx）===');
+  // 端口预检：占着端口会让测试连到陈旧实例上，必须直接中止
+  if (await portInUse(PORT)) {
+    check(
+      `端口 ${PORT} 空闲`,
+      false,
+      `已被占用；先结束占用进程：Get-NetTCPConnection -LocalPort ${PORT} | ForEach-Object { taskkill /PID $_.OwningProcess /T /F }`,
+    );
+    throw new Error(`端口 ${PORT} 被占用，已中止（避免测到陈旧实例）`);
+  }
   // 浏览器 profile 清掉，保证首页是"空态"，截图可重复
   fs.rmSync(profileDir, { recursive: true, force: true });
   const logFd = fs.openSync(logFile, 'w');
@@ -267,11 +311,10 @@ try {
   check('自检流程完整执行', false, err instanceof Error ? err.message : String(err));
 } finally {
   if (server && !server.killed) {
-    // Windows 上 TerminateProcess 足够；/T 顺带收掉 esbuild 服务子进程
-    if (isWin) spawn('taskkill', ['/PID', String(server.pid), '/T', '/F'], { stdio: 'ignore' });
-    else server.kill('SIGTERM');
+    // 同步回收整棵进程树（tsx 下面还挂着 esbuild 服务进程）
+    killTree(server.pid);
   }
-  await sleep(600);
+  await sleep(800);
   console.log(`\n后端日志：${logFile}`);
   if (failures.length > 0) {
     console.log(`\n❌ 自检失败 ${failures.length} 项：`);
