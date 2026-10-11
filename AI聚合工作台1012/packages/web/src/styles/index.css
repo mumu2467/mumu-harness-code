@@ -1,0 +1,313 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+ * 设计令牌：深色为主 + 玻璃拟态，圆角 12px
+ * ==========================================================================*/
+:root {
+  --bg: #080b12;
+  --panel: rgba(255, 255, 255, 0.045);
+  --panel-strong: rgba(255, 255, 255, 0.075);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #e9edf7;
+  --muted: #98a3ba;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --err: #f87171;
+  --idle: #94a3b8;
+  --radius: 12px;
+}
+
+/* 三家品牌色（切换容器上的 .pv-<provider> 即可让内部元素取到对应变量） */
+.pv-deepseek {
+  --pv: #4f6ef7;
+  --pv2: #7c3aed;
+}
+.pv-doubao {
+  --pv: #0ea5e9;
+  --pv2: #14b8a6;
+}
+.pv-kimi {
+  --pv: #64748b;
+  --pv2: #8b5cf6;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* 背景氛围光：两团低饱和度辉光，避免大面积纯黑显得死板 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(720px 420px at 12% -8%, rgba(79, 110, 247, 0.16), transparent 62%),
+    radial-gradient(640px 400px at 92% 6%, rgba(20, 184, 166, 0.12), transparent 60%),
+    radial-gradient(800px 520px at 50% 110%, rgba(124, 58, 237, 0.12), transparent 62%);
+  z-index: 0;
+}
+
+@layer components {
+  /* 玻璃拟态面板 */
+  .glass {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  }
+  .glass-strong {
+    background: var(--panel-strong);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-xl px-3 py-1.5 text-sm;
+    @apply border border-white/10 bg-white/[0.04] text-slate-200 transition;
+    @apply hover:border-white/20 hover:bg-white/[0.09] active:scale-[0.98];
+    @apply disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white/[0.04];
+  }
+  .btn-primary {
+    @apply border-transparent text-white;
+    background-image: linear-gradient(135deg, #4f6ef7, #7c3aed);
+    box-shadow: 0 8px 24px -12px rgba(79, 110, 247, 0.9);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+  }
+  .btn-ghost {
+    @apply border-transparent bg-transparent hover:bg-white/[0.07];
+  }
+  .btn-xs {
+    @apply rounded-lg px-2 py-1 text-xs;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.05] px-2 py-0.5 text-[11px] text-slate-300;
+  }
+
+  /* 品牌色头像 */
+  .pv-avatar {
+    background-image: linear-gradient(135deg, var(--pv), var(--pv2));
+  }
+  .pv-ring {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--pv) 55%, transparent);
+  }
+  .pv-text {
+    color: var(--pv);
+  }
+
+  /* 输入框 */
+  .field {
+    @apply w-full resize-none rounded-xl border border-white/10 bg-black/25 px-3 py-2.5 text-sm text-slate-100;
+    @apply outline-none transition placeholder:text-slate-500;
+    @apply focus:border-white/25 focus:bg-black/35;
+  }
+}
+
+@layer utilities {
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  }
+  .scroll-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 99px;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  .scroll-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .drag-active {
+    border-color: color-mix(in srgb, var(--pv, #4f6ef7) 70%, transparent) !important;
+    background: rgba(79, 110, 247, 0.1) !important;
+  }
+}
+
+/* ============================================================================
+ * 流式输出光标
+ * ==========================================================================*/
+.typing-caret::after {
+  content: '▍';
+  margin-left: 1px;
+  color: var(--pv, #8ab4ff);
+  animation: caret-blink 1s step-end infinite;
+}
+@keyframes caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 状态圆点：加载中呼吸、完成常亮、失败常亮 */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  flex: none;
+}
+.dot-pending {
+  background: var(--idle);
+  animation: dot-pulse 1.2s ease-in-out infinite;
+}
+.dot-done {
+  background: var(--ok);
+}
+.dot-error {
+  background: var(--err);
+}
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* 流式中的标题微光 */
+.sheen-text {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0%, #fff 50%, rgba(255, 255, 255, 0.35) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: tw-sheen 1.8s linear infinite;
+}
+@keyframes tw-sheen {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================================================
+ * 极简 Markdown 渲染样式（渲染器见 src/lib/markdown.ts）
+ * ==========================================================================*/
+.md {
+  font-size: 14px;
+  line-height: 1.72;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.md > *:first-child {
+  margin-top: 0;
+}
+.md > *:last-child {
+  margin-bottom: 0;
+}
+.md p {
+  margin: 0.5em 0;
+}
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  margin: 0.9em 0 0.45em;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.md h1 {
+  font-size: 1.25em;
+}
+.md h2 {
+  font-size: 1.15em;
+}
+.md h3 {
+  font-size: 1.05em;
+}
+.md ul,
+.md ol {
+  margin: 0.5em 0;
+  padding-left: 1.35em;
+}
+.md ul {
+  list-style: disc;
+}
+.md ol {
+  list-style: decimal;
+}
+.md li {
+  margin: 0.2em 0;
+}
+.md code {
+  font-family: 'JetBrains Mono', Consolas, Menlo, monospace;
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+}
+.md pre {
+  margin: 0.6em 0;
+  padding: 0.75em 0.9em;
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.md pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.86em;
+  line-height: 1.6;
+}
+.md blockquote {
+  margin: 0.6em 0;
+  padding: 0.35em 0.8em;
+  border-left: 3px solid color-mix(in srgb, var(--pv, #4f6ef7) 65%, transparent);
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 0 8px 8px 0;
+  color: #cbd5e1;
+}
+.md a {
+  color: color-mix(in srgb, var(--pv, #6ea8ff) 80%, #ffffff);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.md hr {
+  margin: 0.9em 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.md strong {
+  font-weight: 600;
+  color: #fff;
+}

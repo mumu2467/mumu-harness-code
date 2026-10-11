@@ -1,0 +1,26 @@
+{
+  "name": "ai-workbench",
+  "private": true,
+  "version": "0.1.0",
+  "description": "多 AI 聚合工作台：把一条消息（文字 + 图片）同时分发给 DeepSeek / 豆包 / Kimi，并支持三窗并发与聚合对话两种查看模式",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:server": "npm run dev -w @aiwb/server",
+    "dev:web": "npm run dev -w @aiwb/web",
+    "build": "npm run build -w @aiwb/web",
+    "start": "npm run start -w @aiwb/server",
+    "typecheck": "npm run typecheck -w @aiwb/server && npm run typecheck -w @aiwb/web",
+    "shot": "node scripts/shot.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

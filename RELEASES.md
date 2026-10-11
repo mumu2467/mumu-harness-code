@@ -33,6 +33,7 @@ v<N>-<YYMMDD>-<HH-MM>
 | Tag | 时间 | 主要内容 |
 |---|---|---|
 | `v1-261012-00-08` | 2026-10-12 00:08 | 建立仓库与版本同步机制：初始化 git 并接入 GitHub、制定忽略规则、写入 `AGENTS.md` 版本同步规范、新增本文件 |
+| `AI聚合工作台1012-v1-261012-00-59` | 2026-10-12 00:59 | 新增项目「多 AI 聚合工作台」P0+P1：monorepo（shared/server/web）、Fastify + WebSocket 事件契约、`ChatAdapter` 抽象层与 ProviderBus（跨站并行/同站串行）、Mock 离线通道、三窗并发页与聚合对话页全部交互、响应式布局、一键自检链路（31 项后端断言 + 8 场景截图 + 布局断言） |
 
 ## 入库范围约定
 
@@ -51,6 +52,9 @@ v<N>-<YYMMDD>-<HH-MM>
 | `harness启动器0914/release/win-unpacked/` | 约 324MB | electron-builder 中间产物，含 200MB exe，**超过 GitHub 单文件 100MB 硬上限** |
 | `harness启动器0914/release/api.txt` | — | **含真实 API key**，禁止入库 |
 | `边坡4G监测1007/firmware/.pio/libdeps/`、`.pio/build/*/` | 约 66MB | PlatformIO 缓存与编译中间产物，可由 `pio run` 还原 |
+| `AI聚合工作台1012/.tmp/` | — | 自检产物（Edge 浏览器 profile、截图、后端日志），可由 `node scripts/verify.mjs` 重新生成 |
+| `AI聚合工作台1012/data/` | — | 运行期数据（SQLite 库与上传图片），P2 起使用 |
+| `.npm-cache/` | 约 355MB | DSH 沙箱禁止写用户级 npm 缓存，故用工作区内缓存；可由 `npm install --cache` 重新生成 |
 
 > ⚠️ **安全提示**：`harness启动器0914/release/api.txt` 中的 API key 已存在于本地磁盘，
 > 建议尽快到服务商控制台**吊销并轮换**，不要依赖 `.gitignore` 作为唯一防线。
